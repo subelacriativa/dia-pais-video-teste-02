@@ -16,7 +16,6 @@
             user-select: none;
         }
         
-        /* Mensagem de instrução no topo */
         #instrucao {
             position: fixed;
             top: 20px;
@@ -36,14 +35,13 @@
             pointer-events: none;
         }
 
-        /* Botão invisível em todo o ecrã para desbloquear o som do vídeo */
         #botao-play {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -57,15 +55,8 @@
             box-sizing: border-box;
         }
 
-        #botao-play h2 {
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-        }
-
-        #botao-play p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        #botao-play h2 { font-size: 1.6rem; margin-bottom: 10px; }
+        #botao-play p { font-size: 1rem; opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -77,14 +68,41 @@
 
     <div id="instrucao">Aponte a câmara para a frase na caneca! ✨</div>
 
+    <script>
+        // Criando um componente robusto do A-Frame para gerenciar o vídeo sem falhas
+        AFRAME.registerComponent('controle-video', {
+            init: function () {
+                const video = document.getElementById('video-mensagem');
+                
+                this.el.addEventListener('markerFound', () => {
+                    video.play().catch(err => console.log("Erro ao reproduzir:", err));
+                });
+
+                this.el.addEventListener('markerLost', () => {
+                    video.pause();
+                });
+            }
+        });
+    </script>
+
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
         
         <a-assets>
-            <video id="video-mensagem" src="https://github.com/subelacriativa/ra/blob/main/20260524_083410.mp4" preload="auto" loop="true" crossorigin="anonymous" playsinline webkit-playsinline></video>
+            <!-- LINK CORRIGIDO PARA O MODO RAW DO GITHUB -->
+            <video 
+                id="video-mensagem" 
+                src="https://raw.githubusercontent.com/subelacriativa/ra/main/20260524_083410.mp4" 
+                preload="auto" 
+                loop="true" 
+                crossorigin="anonymous" 
+                playsinline 
+                webkit-playsinline>
+            </video>
         </a-assets>
 
-        <a-marker type="pattern" url="https://raw.githubusercontent.com/subelacriativa/ra/main/pattern-Montserrat%20Extra%20Bold.patt" id="marcador">
-            <a-video src="#video-mensagem" width="1.5" height="1.5" position="0 0.3 0" rotation="-90 0 0"></a-video>
+        <!-- Adicionado o componente 'controle-video' aqui -->
+        <a-marker type="pattern" url="https://raw.githubusercontent.com/subelacriativa/ra/main/pattern-Montserrat%20Extra%20Bold.patt" id="marcador" controle-video>
+            <a-video src="#video-mensagem" width="1.5" height="1.5" position="0 0.1 0" rotation="-90 0 0"></a-video>
         </a-marker>
 
         <a-entity camera></a-entity>
@@ -92,21 +110,15 @@
 
     <script>
         const botaoPlay = document.getElementById('botao-play');
-        const marcador = document.getElementById('marcador');
         const video = document.getElementById('video-mensagem');
-        let somDesbloqueado = false;
 
-        // Tenta iniciar o vídeo e dar permissões assim que clicar no botão de entrada
         botaoPlay.addEventListener('click', function() {
-            // Garante que o vídeo toque e pause para o navegador aceitar o áudio posterior
+            // Desbloqueia o áudio reproduzindo e pausando imediatamente
             video.play().then(() => {
                 video.pause(); 
-                somDesbloqueado = true;
                 esconderBotao();
             }).catch(error => {
-                console.log("Aviso de áudio:", error);
-                // Mesmo que o áudio falhe inicialmente, remove a tela para liberar a câmera
-                somDesbloqueado = true;
+                console.log("Interação aceita:", error);
                 esconderBotao();
             });
         });
@@ -117,17 +129,6 @@
                 botaoPlay.style.display = 'none';
             }, 500);
         }
-
-        // Eventos do Marcador
-        marcador.addEventListener('markerFound', function() {
-            if (somDesbloqueado) {
-                video.play();
-            }
-        });
-
-        marcador.addEventListener('markerLost', function() {
-            video.pause();
-        });
     </script>
 </body>
 </html>
