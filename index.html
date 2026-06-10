@@ -101,8 +101,23 @@
         </a-assets>
 
         <!-- Adicionado o componente 'controle-video' aqui -->
+         <!-- Marcador com o componente de controle -->
         <a-marker type="pattern" url="https://raw.githubusercontent.com/subelacriativa/ra/main/pattern-Montserrat%20Extra%20Bold.patt" id="marcador" controle-video>
-            <a-video src="#video-mensagem" width="1.5" height="1.5" position="0 0.1 0" rotation="-90 0 0"></a-video>
+            
+            <!-- 
+               Ajustes feitos:
+               1. material="side: double" -> Faz o vídeo aparecer mesmo se estiver de cabeça para baixo ou invertido.
+               2. position="0 0.2 0" -> Eleva o vídeo 20cm acima da caneca para não sumir dentro dela.
+               3. scale="1.5 1.5 1.5" -> Aumenta o tamanho do plano para garantir que você o veja.
+            -->
+            <a-video 
+                src="#video-mensagem" 
+                position="0 0.2 0" 
+                rotation="-90 0 0" 
+                scale="1.5 1.5 1.5"
+                material="side: double;">
+            </a-video>
+
         </a-marker>
 
         <a-entity camera></a-entity>
