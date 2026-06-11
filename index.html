@@ -22,7 +22,7 @@
             overflow: hidden;
         }
 
-        /* Cartão de Mensagem Principal */
+        /* CARD PRINCIPAL (TELA 1) */
         .cartao-surpresa {
             background: white;
             border-radius: 24px;
@@ -32,8 +32,6 @@
             max-width: 450px;
             text-align: center;
             animation: surgir 0.8s ease-out;
-            position: relative;
-            z-index: 1;
         }
 
         .icone-coracao {
@@ -63,7 +61,7 @@
             border-left: 4px solid #ff5e62;
         }
 
-        .btn-play {
+        .btn-principal {
             background: linear-gradient(135deg, #ff9966, #ff5e62);
             color: white;
             border: none;
@@ -78,33 +76,90 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
 
-        .btn-play:active {
-            transform: scale(0.98);
-        }
+        .btn-principal:active { transform: scale(0.98); }
 
-        /* CORREÇÃO DO VÍDEO: Fica na tela, mas invisível e sem atrapalhar o clique */
-        video {
+        /* CONTAINER DO PLAYER (TELA 2 - FALSA TELA CHEIA) */
+        #container-player {
             position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* BOTÕES DO FIM DO VÍDEO (OVERLAY) */
+        #menu-fim-video {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            background: black;
-            opacity: 0;
-            pointer-events: none;
-            z-index: -1;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            z-index: 10000;
         }
 
-        /* Classe ativada por JavaScript para trazer o vídeo para a frente em tela cheia */
-        video.modo-tela-cheia {
-            opacity: 1;
-            pointer-events: auto;
-            z-index: 9999;
+        /* TELA FINAL DE COMPARTILHAMENTO (TELA 3) */
+        #tela-final {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 35px 25px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            display: none;
+            animation: surgir 0.5s ease-out;
         }
+
+        .lista-botoes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn-opcao {
+            background: #f1f5f9;
+            color: #334155;
+            border: 2px solid #e2e8f0;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-opcao:active { transform: scale(0.98); }
+        .btn-opcao.whatsapp { background: #25D366; color: white; border: none; }
+        .btn-opcao.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; border: none; }
+        .btn-opcao.baixar { background: #3b82f6; color: white; border: none; }
 
         @keyframes surgir {
             from { opacity: 0; transform: translateY(20px); }
@@ -117,71 +172,103 @@
             100% { transform: scale(1); }
         }
 
-        .rodape {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #a0aec0;
-            letter-spacing: 1px;
-        }
+        .rodape { margin-top: 20px; font-size: 0.8rem; color: #a0aec0; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-    <div class="cartao-surpresa" id="cartao">
+    <div class="cartao-surpresa" id="tela-inicial">
         <span class="icone-coracao">❤️</span>
         <h1>Para o Melhor Pai!</h1>
-        
         <div class="mensagem">
             "Pai, cada momento ao seu lado é uma memória que guardo para sempre no coração. Obrigado por ser meu porto seguro, meu herói e meu melhor amigo. Preparei uma surpresa em vídeo para você lembrar o quanto te amo!"
         </div>
-
-        <button class="btn-play" id="player-trigger">
+        <button class="btn-principal" id="btn-abrir-video">
             <span>▶️</span> CLIQUE AQUI PARA VER A MÁGICA
         </button>
-
         <div class="rodape">SU BELA CRIATIVA</div>
     </div>
 
-    <video id="video-principal" src="https://raw.githubusercontent.com/subelacriativa/ra/main/20260524_083410.mp4" crossorigin="anonymous" playsinline webkit-playsinline></video>
+
+    <div id="container-player">
+        <video id="video-principal" src="https://raw.githubusercontent.com/subelacriativa/ra/main/20260524_083410.mp4" crossorigin="anonymous" playsinline webkit-playsinline></video>
+        
+        <div id="menu-fim-video">
+            <h2 style="color: white; margin-bottom: 10px;">O que deseja fazer agora?</h2>
+            <button class="btn-principal" id="btn-repetir" style="background: #3b82f6; box-shadow: none; max-width: 280px;">🔄 Assistir Novamente</button>
+            <button class="btn-principal" id="btn-voltar" style="background: #ef4444; box-shadow: none; max-width: 280px;">🚪 Voltar</button>
+        </div>
+    </div>
+
+
+    <div id="tela-final">
+        <span style="font-size: 3rem;">🎁</span>
+        <h1 style="margin-top: 10px;">Gostou da Surpresa?</h1>
+        <p style="color: #64748b;">Guarde ou compartilhe essa linda recordação!</p>
+        
+        <div class="lista-botoes">
+            <a href="https://api.whatsapp.com/send?text=Olha%20a%20surpresa%20linda%20que%20ganhei%20de%20Dia%20dos%20Pais!%20❤️%20https://subelacriativa.github.io/ra/" target="_blank" class="btn-opcao whatsapp">
+                <span>💬</span> Compartilhar no WhatsApp
+            </a>
+            
+            <a href="https://instagram.com" target="_blank" class="btn-opcao instagram">
+                <span>📸</span> Abrir o Instagram
+            </a>
+            
+            <a href="https://raw.githubusercontent.com/subelacriativa/ra/main/20260524_083410.mp4" download="Surpresa_SBC.mp4" target="_blank" class="btn-opcao baixar">
+                <span>📥</span> Baixar Vídeo de Recordação
+            </a>
+
+            <button class="btn-opcao" id="btn-recomecar-tudo" style="margin-top: 15px; font-size: 0.9rem;">
+                ↩️ Voltar para a Mensagem Inicial
+            </button>
+        </div>
+        <div class="rodape">SU BELA CRIATIVA</div>
+    </div>
 
     <script>
-        const botao = document.getElementById('player-trigger');
+        const telaInicial = document.getElementById('tela-inicial');
+        const containerPlayer = document.getElementById('container-player');
+        const menuFimVideo = document.getElementById('menu-fim-video');
+        const telaFinal = document.getElementById('tela-final');
+        
         const video = document.getElementById('video-principal');
+        
+        const btnAbrirVideo = document.getElementById('btn-abrir-video');
+        const btnRepetir = document.getElementById('btn-repetir');
+        const btnVoltar = document.getElementById('btn-voltar');
+        const btnRecomecarTudo = document.getElementById('btn-recomecar-tudo');
 
-        botao.addEventListener('click', function() {
-            // 1. Torna o vídeo visível e joga para a frente antes do comando de tela cheia
-            video.classList.add('modo-tela-cheia');
-
-            // 2. Tenta abrir a tela cheia nativa do dispositivo
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            } else if (video.webkitRequestFullscreen) { /* Dispositivos iOS / Safari */
-                video.webkitRequestFullscreen();
-            } else if (video.webkitEnterFullscreen) { /* Fallback alternativo para iPhones antigos */
-                video.webkitEnterFullscreen();
-            }
-
-            // 3. Dá o Play no vídeo com áudio liberado
-            video.play().catch(error => {
-                console.log("Erro ao reproduzir vídeo:", error);
-            });
+        // 1. AÇÃO: Clicar no botão da Mensagem Inicial
+        btnAbrirVideo.addEventListener('click', function() {
+            telaInicial.style.display = 'none';
+            containerPlayer.style.display = 'flex';
+            video.play().catch(err => console.log("Erro ao reproduzir:", err));
         });
 
-        // Monitora quando o utilizador sai da tela cheia para esconder o vídeo novamente
-        document.addEventListener('fullscreenchange', checarSaidaTelaCheia);
-        document.addEventListener('webkitfullscreenchange', checarSaidaTelaCheia);
+        // 2. DETECTOR: O vídeo chegou ao fim!
+        video.addEventListener('ended', function() {
+            menuFimVideo.style.display = 'flex'; // Faz o menu surgir por cima do vídeo
+        });
 
-        function checarSaidaTelaCheia() {
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                video.pause();
-                video.classList.remove('modo-tela-cheia'); // Esconde o player e volta para o cartão de mensagem
-            }
-        }
-        
-        // Correção específica para o comportamento do iOS Safari
-        video.addEventListener('webkitendfullscreen', function() {
-            video.pause();
-            video.classList.remove('modo-tela-cheia');
+        // 3. AÇÃO: Assistir Novamente
+        btnRepetir.addEventListener('click', function() {
+            menuFimVideo.style.display = 'none';
+            video.currentTime = 0; // Volta o vídeo pro segundo 0
+            video.play();
+        });
+
+        // 4. AÇÃO: Clicar em Voltar (Leva para a tela de Compartilhar)
+        btnVoltar.addEventListener('click', function() {
+            menuFimVideo.style.display = 'none';
+            containerPlayer.style.display = 'none';
+            telaFinal.style.display = 'block';
+        });
+
+        // 5. AÇÃO: Recomeçar tudo do zero
+        btnRecomecarTudo.addEventListener('click', function() {
+            telaFinal.style.display = 'none';
+            telaInicial.style.display = 'block';
         });
     </script>
 </body>
