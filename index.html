@@ -7,7 +7,7 @@
 
     <meta property="og:title" content="Uma Surpresa Especial Para Você! ❤️">
     <meta property="og:description" content="Clique para ver a homenagem linda de Dia dos Pais que preparei!">
-    <meta property="og:image" content="https://subelacriativa.github.io/dia-pais-video-teste/foto-previa.jpg">
+    <meta property="og:image" content="foto-previa.jpg">
     <meta property="og:url" content="https://subelacriativa.github.io/dia-pais-video-teste/">
     <meta property="og:type" content="website">
 
@@ -259,7 +259,6 @@
         .btn-opcao:active { transform: scale(0.98); }
         .btn-opcao.whatsapp { background: #25D366; color: white; border: none; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
         .btn-opcao.baixar { background: #3b82f6; color: white; border: none; }
-        .btn-opcao.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; border: none; }
 
         @keyframes surgir {
             from { opacity: 0; transform: translateY(20px); }
@@ -305,7 +304,7 @@
             <span>🎮</span> CLIQUE AQUI
         </button>
         <div class="rodape">
-            <img src="https://raw.githubusercontent.com/subelacriativa/dia-pais-video-teste/main/logo_sbc.png" alt="Su Bela Criativa">
+            <img src="logo_sbc.png" alt="Su Bela Criativa">
         </div>
     </div>
 
@@ -321,7 +320,7 @@
         </div>
         
         <div class="rodape">
-            <img src="https://raw.githubusercontent.com/subelacriativa/dia-pais-video-teste/main/logo_sbc.png" alt="Su Bela Criativa">
+            <img src="logo_sbc.png" alt="Su Bela Criativa">
         </div>
     </div>
 
@@ -333,7 +332,7 @@
     </div>
 
     <div id="container-player">
-        <video id="video-principal" src="https://raw.githubusercontent.com/subelacriativa/dia-pais-video-teste/main/20260524_083410.mp4" crossorigin="anonymous" playsinline webkit-playsinline></video>
+        <video id="video-principal" src="20260524_083410.mp4" crossorigin="anonymous" playsinline webkit-playsinline></video>
         
         <div id="menu-fim-video">
             <h2>O que deseja fazer agora?</h2>
@@ -352,20 +351,16 @@
                 <span>💬</span> Compartilhar no WhatsApp
             </a>
             
-            <a href="https://raw.githubusercontent.com/subelacriativa/ra/main/20260524_083410.mp4" download="Surpresa_SBC.mp4" target="_blank" class="btn-opcao baixar">
+            <a href="20260524_083410.mp4" download="Surpresa_SBC.mp4" target="_blank" class="btn-opcao baixar">
                 <span>📥</span> Salvar Vídeo na Galeria
             </a>
-            
-            <button id="btn-instagram" class="btn-opcao instagram">
-                <span>📸</span> Compartilhar no Instagram
-            </button>
 
             <button class="btn-opcao" id="btn-recomecar-tudo" style="margin-top: 15px; font-size: 0.9rem;">
                 ↩️ Voltar para a Mensagem Inicial
             </button>
         </div>
         <div class="rodape">
-            <img src="https://raw.githubusercontent.com/subelacriativa/dia-pais-video-teste/main/logo_sbc.png" alt="Su Bela Criativa">
+            <img src="logo_sbc.png" alt="Su Bela Criativa">
         </div>
     </div>
 
@@ -384,9 +379,6 @@
         const btnRepetir = document.getElementById('btn-repetir');
         const btnVoltar = document.getElementById('btn-voltar');
         const btnRecomecarTudo = document.getElementById('btn-recomecar-tudo');
-        const btnInstagram = document.getElementById('btn-instagram');
-
-        const legendaInstagram = "@subelacriativa #diadospais";
 
         // LÓGICA DO JOGO DO CLIQUE CERTO (GENIUS)
         const sequenciaJogo = [0, 2, 1]; 
@@ -522,24 +514,6 @@
         btnRecomecarTudo.addEventListener('click', function() {
             telaFinal.style.display = 'none';
             telaInicial.style.display = 'block';
-        });
-
-        // COMPARTILHAMENTO DO INSTAGRAM
-        btnInstagram.addEventListener('click', function() {
-            navigator.clipboard.writeText(legendaInstagram).then(() => {
-                alert("✨ O @ da loja foi copiado!\n\nSe você tiver o app do Instagram, ele abrirá direto nos Stories. Selecione o vídeo na sua galeria e cole a marcação!");
-                
-                const tempoInicial = Date.now();
-                window.location.href = "instagram://story-camera";
-
-                setTimeout(function() {
-                    if (Date.now() - tempoInicial < 2000) {
-                        window.open("https://instagram.com", "_blank");
-                    }
-                }, 1500);
-            }).catch(err => {
-                window.open("https://instagram.com", "_blank");
-            });
         });
     </script>
 </body>
