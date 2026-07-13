@@ -511,7 +511,9 @@
             acenderBotao(idCor);
             passosUsuario.push(idCor);
 
-            const passoAtual = pasosUsuario.length - 1;
+            const passoAtual = passosUsuario.length - 1;
+            
+            // Correção da variável passosUsuario que estava escrita com erro de digitação
             if (passosUsuario[passoAtual] !== sequenciaJogo[passoAtual]) {
                 podeClicar = false;
                 textoInstrucoes.innerText = "❌ Ops! Ordem errada. Tente de novo!";
